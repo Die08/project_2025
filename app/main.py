@@ -17,6 +17,8 @@ from app.routers import frontend
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 from app.data.db import init_database
+from app.routers import api_events #importo apy_events dalla cartella delle route
+
 
 
 @asynccontextmanager
@@ -34,6 +36,7 @@ app.mount(
     name="static"
 )
 app.include_router(frontend.router)
+app.include_router(api_events.router) #aggiunge effettivamente la rotta GET /events
 
 
 if __name__ == "__main__":
