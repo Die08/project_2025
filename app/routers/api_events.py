@@ -4,7 +4,7 @@ from sqlmodel import select   #serve per costruire le query SQL
 from app.models.event import Event #importo il modello Event, per dire a FastAPI e SQLModel che tipo di dati sto trattando
 from app.data.db import SessionDep #importo la sessione del database da db.py
 from fastapi import status
-
+from fastapi import HTTPException
 
 """Ora creo un gruppo di rotte che inizieranno tutte con http://localhost:8000/events"""
 """I due parametri sono prefix -> (tutte le rotte definite avranno events/ davanti)
@@ -43,4 +43,9 @@ def delete_all_events(session: SessionDep):
     session.exec(delete(Event)) #exec(delete(Event)) -> esegue una query SQL DELETE FROM event; , session. -> la esegue nel database
     session.commit() #salva tutte le operazioni fatte nella sessione
 
-
+@router.get("/{id}", response_model=Event, status_code=status.HTTP_200_OK)
+def get_event_by_id(id: int, session: SessionDep):
+    event = session.get(Event, id) #se esiste, event sarà un oggetto del tipo Event
+    if not event:  #se non esiste, event sarà none e solleverà un eccezione (if event==none)
+        raise HTTPException(status_code=404, detail="Evento non trovato") #eccezione di errore 404
+    return event   #se esiste, ritorna l'evento ricercato
