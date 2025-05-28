@@ -3,7 +3,8 @@ from pathlib import Path
 
 class _Config:
     def __init__(self):
-        self._root_dir: Path = Path("app")
+        self._root_dir: Path = Path(__file__).resolve().parent.parent
+
 
     @property
     def root_dir(self) -> Path:

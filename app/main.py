@@ -5,7 +5,12 @@ from app.config import config
 from pathlib import Path
 import os
 
-# ...and here!!
+from fastapi import FastAPI
+from app.routers import events
+
+app = FastAPI()
+
+app.include_router(events.router)
 
 if Path(__file__).parent == Path(os.getcwd()):
     config.root_dir = "."
